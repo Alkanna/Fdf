@@ -10,57 +10,91 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <mlx.h>
+#include "mlx/mlx.h"
+#include "./fdf.h"
+#include <stdlib.h>
+#include "libft/libft.h"
 
-struct s_env
+#define XSIZE 1500
+#define YSIZE 1500
+
+/*
+** Function to catch ESC key and exit properly
+*/
+
+void clean_exit(t_fdf *mlx)
 {
-	void	*mlx_ptr;
-	void	*mlx_win;
-}			t_env;
+	mlx_destroy_image(mlx->instance, mlx->win);
+}
 
+int  keydown_hook(int keycode, t_fdf *mlx)
+{
+	if (keycode == 53)
+	{
+		mlx->fd = 1;
+//		clean_exit(mlx);
+		exit(0);
+	}
+	else
+		return (0);
+}
 
-void drawSquare(void *mlx_ptr, void *mlx_win, int xStart, int yStart, int xEnd, int yEnd, int color)
+/*
+** Initialisation of the interface wrapper
+*/
+
+void initWrapper(t_fdf *mlx, t_newShape *shape)
+{
+	shape[0] = (t_newShape){0, 0, XSIZE, 50};
+	drawShape(mlx, *shape, 0xFFFF);
+	shape[0] = (t_newShape){0, XSIZE - 50, XSIZE, XSIZE};
+	drawShape(mlx, *shape, 0xFFFF);
+}
+
+/*
+** Function used to draw a shape using 2 points named start and end with their respective x and y axis
+*/
+
+void drawShape(t_fdf *mlx, t_newShape shape, int color)
 {
 	int xBackup;
 
-	xBackup = xStart;
+	xBackup = shape.xStart;
 
-	while (yStart <= yEnd)
+	while (shape.yStart <= shape.yEnd)
 	{
-		mlx_pixel_put(mlx_ptr, mlx_win, xStart, yStart, color);
-		xStart++;
-		if (xStart == xEnd + 1)
+		mlx_pixel_put(mlx->instance, mlx->win, shape.xStart, shape.yStart, color);
+		shape.xStart++;
+		if (shape.xStart == shape.xEnd + 1)
 		{
-			yStart++;
-			xStart = xBackup;
+			shape.yStart++;
+			shape.xStart = xBackup;
 		}
 	}
 }
 
 int main(void)
 {
-	void	*mlx_ptr;
-	void	*mlx_win1;
+
 	int		x;
 	int		y;
+	t_fdf *mlx;
+	t_newShape *shape;
 
+	if ((mlx = malloc(4 * sizeof(t_fdf))) == NULL)
+		return (0);
 	x = 0;
 	y = 0;
-	if ((mlx_ptr = mlx_init()) == (void *) 0)
+	if ((mlx->instance = mlx_init()) == (void *) 0)
 		return 0;
-	mlx_win1 = mlx_new_window(mlx_ptr, 500, 500, "Weev\'s Fdf");
-	while (y <= 50)
-	{
-		mlx_pixel_put(mlx_ptr, mlx_win1, x, y, 0xFFFF);
-		x++;
-		if (x == 501)
-		{
-			y++;
-			x = 0;
-		}
-	}
-	drawSquare(mlx_ptr, mlx_win1, 245, 245, 255, 255, 0xFFFF);
-	drawSquare(mlx_ptr, mlx_win1, 450, 50, 475, 75, 0xCD5C5C);
-	drawSquare(mlx_ptr, mlx_win1, 450, 90, 475, 95, 0xCD5C5C);
-	mlx_loop(mlx_ptr);
+	mlx->win = mlx_new_window(mlx->instance, XSIZE, YSIZE, "Weev\'s Fdf");
+	if ((shape = malloc(4 * sizeof(t_newShape))) == NULL)
+		return (0);
+	initWrapper(mlx, shape);
+	//	drawSquare(mlx->instance, mlx->win, 450, 50, 475, 75, 0xCD5C5C);
+	//	drawSquare(mlx->instance, mlx->win, 450, 90, 475, 95, 0xCD5C5C);
+	mlx_key_hook(mlx->win, keydown_hook, &mlx);
+	mlx_string_put(mlx->instance, mlx->win, 15, 15, 0xCD5C5C, "Quit: ESC");
+	free(shape);
+	mlx_loop(mlx->instance);
 }

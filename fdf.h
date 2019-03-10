@@ -1,22 +1,26 @@
 #ifndef FDF_H
 # define FDF_H
 
+# define ESC 27
+
 typedef struct		s_fdf
 {
 	int				fd;
 	char			*name;
-	void			*mlx;
+	void			*instance;
 	void			*win;
-	int				**map;
-	int				lines;
-	int				check;
-	int				chars;
-	int				z;
-	int				dx;
-	int				dy;
-	int				sx;
-	int				sy;
-	unsigned long	color;
 }					t_fdf;
+
+typedef struct		s_newShape
+{
+	int				xStart;
+	int				yStart;
+	int				xEnd;
+	int				yEnd;
+}					t_newShape;
+
+int keydown_hook(int keycode, t_fdf *mlx);
+void initWrapper(t_fdf *mlx, t_newShape *shape);
+void drawShape(t_fdf *mlx, t_newShape shape, int color);
 
 #endif
