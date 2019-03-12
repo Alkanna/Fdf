@@ -17,6 +17,7 @@
 # include <stddef.h>
 # include <unistd.h>
 # include <wchar.h>
+# include "get_next_line.h"
 # define RESET "\x1b[0m"
 
 /*
@@ -77,7 +78,7 @@ int				ft_strequ(char const *s1, char const *s2);
 int				ft_strnequ(char const *s1, char const *s2, size_t n);
 char			*ft_strsub(char const *s, unsigned int start, size_t len);
 char			*ft_strjoin(char const *s1, char const *s2);
-char			*ft_strjoinfree(char *s1, char *s2);
+char			*ft_strjoinfree(const char *s1, const char *s2, int mode);
 char			*ft_strtrim(char const *s);
 char			**ft_strsplit(char const *s, char c);
 char			*ft_itoa(int n);
@@ -113,5 +114,7 @@ int				ft_isspace(int c);
 size_t			ft_wcslen(const wchar_t *s);
 void			ft_putstrc(char *str, char *color, size_t len);
 float			ft_sqrt(float nb);
+size_t			ft_num_words(const char *str, char sep);
+void			ft_splitdel(char ***split);
 
 #endif

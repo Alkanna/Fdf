@@ -80,7 +80,8 @@ SRC_NAME =  ft_iswhitespace.c	ft_memcmp.c			ft_putstr.c			ft_striter.c		ft_strns
 			ft_isprint.c        ft_memccpy.c        ft_putnbr.c         ft_strequ.c         ft_strnequ.c \
 			ft_isupper.c        ft_memchr.c         ft_putnbr_fd.c      ft_strinit.c        ft_strnew.c \
 			ft_isspace.c		ft_wcslen.c			ft_putstrc.c		ft_isinstr.c		ft_instr.c \
-			ft_strcutat.c		ft_strjoinfree.c	ft_sqrt.c
+			ft_strcutat.c		ft_strjoinfree.c	ft_sqrt.c \
+			get_next_line.c		ft_num_words.c		ft_splitdel.c
 OBJ_NAME = $(SRC_NAME:.c=.o)
 
 SRC_PATH = ./
